@@ -2,15 +2,19 @@ import requests
 import yaml
 import json
 import csv
+import os
 
 
 
 class YP:
     def __init__(self, APIKey=None):
         if not APIKey:
-            with open('creds.yaml') as file:
-                creds = yaml.load(file)
-            APIKey = creds['YP']['APIKey']
+            if 'YPAPIKey' in os.environ:
+                APIKey = os.environ['YPAPIKey']
+            else:    
+                with open('creds.yaml') as file:
+                    creds = yaml.load(file)
+                APIKey = creds['YP']['APIKey']
         self.APIKey = APIKey
 
 
