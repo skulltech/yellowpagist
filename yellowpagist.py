@@ -10,7 +10,7 @@ app = Flask(__name__)
 def scrape_listings():
     if request.method == 'POST':
         scraper = YP()
-        listings = yp.search(request.form['term'], request.form['location'], 
+        listings = scraper.search(request.form['term'], request.form['location'], 
                             int(request.form['radius']), float(request.form['minRating']))
         
         save(listings)
