@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Credentials
+creds.yaml
+
+# Scraped results
+listings.csv
