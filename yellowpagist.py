@@ -1,5 +1,5 @@
-from yp import YP
-from flask import Flask, render_template, request
+from yp import YP, save
+from flask import Flask, render_template, request, send_file
 
 
 
@@ -12,8 +12,9 @@ def scrape_listings():
         scraper = YP()
         listings = yp.search(request.form['term'], request.form['location'], 
                             int(request.form['radius']), float(request.form['minRating']))
-
-        return render_template('listings.html', listings=listings)
+        
+        save(listings)
+        return send_file('listings.csv')
     else:
         return render_template('form.html')
 

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <form class="form" action="/" method="post">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="/static/images/yellow-pages.png" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Yellowpagist</h1>
+        <p>Scrape business listings from <a href="https://www.yellowpages.com/">yellowpages.com</a></p>
+      </div>
+
+      <div class="form-label-group">
+        <input type="text" id="term" name="term" class="form-control" placeholder="Search term" required autofocus>
+        <label for="term">Search term</label>
+      </div>
+
+      <div class="form-label-group">
+        <input type="text" id="location" name="location" class="form-control" placeholder="Location" required>
+        <label for="location">Location</label>
+      </div>
+
+      <div class="form-label-group">
+        <input type="number" id="radius" name="radius" class="form-control" placeholder="Radius" required>
+        <label for="term">Radius</label>
+      </div>
+
+      <div class="form-label-group">
+        <input type="number" id="minRating" name="minRating" class="form-control" placeholder="Minimum rating" required>
+        <label for="term">Minimum rating</label>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2018</p>
+    </form>
+
+{% endblock %}

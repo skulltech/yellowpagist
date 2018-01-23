@@ -47,6 +47,16 @@ class YP:
             return listings
 
 
+def save(listings):
+    with open('listings.csv', 'w', newline='') as csvfile:
+        fieldnames = ['listingId', 'businessName', 'ratingCount', 'averageRating', 'city', 'state', 'zip', 'phone', 'moreInfoURL']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
+
+        writer.writeheader()
+        for listing in listings:
+            writer.writerow(listing)
+
+
 def main():
     yp = YP()
     term = input('[*] Search term: ')
@@ -57,16 +67,8 @@ def main():
     except TypeError:
         minRating = None
     
-    fieldnames = ['listingId', 'businessName', 'ratingCount', 'averageRating', 'city', 'state', 'zip', 'phone', 'moreInfoURL']
     listings = yp.search(term, location, radius, minRating)
-
-    with open('listings.csv', 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
-
-        writer.writeheader()
-        for listing in listings:
-            writer.writerow(listing)
-
+    save(listings)
     print()
     print('[*] {} listings scraped. Saved in listings.csv'.format(len(listings)))
 
