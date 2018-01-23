@@ -14,7 +14,7 @@ class YP:
         self.APIKey = APIKey
 
 
-    def search(self, term, location, radius):
+    def search(self, term, location, radius, minRating=None):
         listings = []
         endpoint = 'http://api2.yp.com/listings/v1/search'
         payload = {
@@ -41,7 +41,10 @@ class YP:
             listings = listings + response['searchResult']['searchListings']['searchListing']
             payload['pagenum'] = payload['pagenum'] + 1
 
-        return listings
+        if minRating:
+            return [x for x in listings if x['averageRating'] >= minRating]
+        else:
+            return listings
 
 
 def main():
@@ -49,9 +52,13 @@ def main():
     term = input('[*] Search term: ')
     location = input('[*] Location: ')
     radius = int(input('[*] Radius (in miles): '))
+    try:
+        minRating = float(input('[*] Minimum rating (optional): '))
+    except TypeError:
+        minRating = None
     
     fieldnames = ['listingId', 'businessName', 'ratingCount', 'averageRating', 'city', 'state', 'zip', 'phone', 'moreInfoURL']
-    listings = yp.search(term, location, radius)
+    listings = yp.search(term, location, radius, minRating)
 
     with open('listings.csv', 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
