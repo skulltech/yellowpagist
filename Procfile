@@ -1,1 +1,1 @@
-web gunicorn yellowpagist:app
+web gunicorn -t 300 yellowpagist:app
