@@ -18,7 +18,7 @@ class YP:
         self.APIKey = APIKey
 
 
-    def search(self, term, location, radius, minRating=None):
+    def search(self, term, location, radius, minRating=None, maxRating=None):
         listings = []
         endpoint = 'http://api2.yp.com/listings/v1/search'
         payload = {
@@ -46,9 +46,11 @@ class YP:
             payload['pagenum'] = payload['pagenum'] + 1
 
         if minRating:
-            return [x for x in listings if x['averageRating'] >= minRating]
-        else:
-            return listings
+            listings =  [x for x in listings if x['averageRating'] >= minRating]
+        if maxRating:
+            listings =  [x for x in listings if x['averageRating'] <= maxRating]
+        
+        return listings
 
 
 def save(listings):
@@ -70,8 +72,12 @@ def main():
         minRating = float(input('[*] Minimum rating (optional): '))
     except TypeError:
         minRating = None
+    try:
+        maxRating = float(input('[*] Maximum rating (optional): '))
+    except TypeError:
+        maxRating = None
     
-    listings = yp.search(term, location, radius, minRating)
+    listings = yp.search(term, location, radius, minRating, maxRating)
     save(listings)
     print()
     print('[*] {} listings scraped. Saved in listings.csv'.format(len(listings)))

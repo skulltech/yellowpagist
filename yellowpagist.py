@@ -11,7 +11,7 @@ def scrape_listings():
     if request.method == 'POST':
         scraper = YP()
         listings = scraper.search(request.form['term'], request.form['location'], 
-                            int(request.form['radius']), float(request.form['minRating']))
+                            int(request.form['radius']), float(request.form['minRating']), float(request.form['maxRating']))
         
         save(listings)
         return send_file('listings.csv')
