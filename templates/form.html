@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <form class="form" id="form" action="/" method="post">
+    <form class="form" id="form">
       <div class="text-center mb-4">
         <img class="mb-4" src="/static/images/yellow-pages.png" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">YELLOWPAGIST</h1>
@@ -34,6 +34,7 @@
       </div>
 
       <button id="submitBtn" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+      <i id="loadingGIF" style="display:none" class="fa fa-spinner fa-spin" style="font-size:24px"></i>
       <p class="mt-5 mb-3 text-muted text-center">&copy; 2018</p>
     </form>
 
