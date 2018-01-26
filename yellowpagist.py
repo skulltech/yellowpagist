@@ -1,15 +1,23 @@
 from yp import YP, save
+from rq import Queue
+from rq.job import Job
+from worker import conn
 from flask import Flask, render_template, request, send_file
 
 
 
 app = Flask(__name__)
+q = Queue(connection=conn)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def scrape_listings():
     if request.method == 'POST':
         scraper = YP()
+        job = q.enqueue_call(func=scraper.search, args=(request.form['term'], request.form['location'], 
+                            int(request.form['radius']), float(request.form['minRating']), float(request.form['maxRating'])), 
+                            result_ttl=5000)
+        print(job.get_id())
         listings = scraper.search(request.form['term'], request.form['location'], 
                             int(request.form['radius']), float(request.form['minRating']), float(request.form['maxRating']))
         
