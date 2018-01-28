@@ -1,15 +1,22 @@
 // custom javascript
 
-$( document ).ready(() => {
+$(document).ready(() => {
   console.log('Sanity Check!');
 });
 
-$('#submitBtn').on('click', function() {
-  $.ajax({
-    url: '/enqueue',
-    data: $(this).data('type'),
-    method: 'POST'
-  })
+$('form').submit(function(event) {
+  var formdata = $(this).serializeObject();
+  console.log(formdata);
+  event.preventDefault();
+
+  $.ajax(
+    {
+      url: '/enqueue',
+      data: formdata,
+      type: 'POST',
+      dataType: 'JSON'
+    }
+  )
   .done((res) => {
     getStatus(res.data.task_id)
   })
@@ -24,13 +31,14 @@ function getStatus(taskID) {
     method: 'GET'
   })
   .done((res) => {
-    const html = 
     $("#loadingGIF").show();
     $("#submitBtn").hide();
     const taskStatus = res.data.task_status;
 
     if (taskStatus === 'finished' || taskStatus === 'failed') {
       window.location.assign(`/download/${taskID}`);
+      $("#loadingGIF").hide();
+      $("#submitBtn").show();
       return false;
     }
     setTimeout(function() {

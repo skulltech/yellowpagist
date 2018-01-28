@@ -18,9 +18,9 @@ def index():
 @app.route('/enqueue', methods=['POST'])
 def enqueue():
     scraper = YP()
-    job = q.enqueue_call(func=scraper.search, args=(request.form['term'], request.form['location'], 
+    task = q.enqueue_call(func=scraper.search, args=(request.form['term'], request.form['location'], 
                         int(request.form['radius']), float(request.form['minRating']), float(request.form['maxRating'])), 
-                        result_ttl=5000)
+                        result_ttl=5000, timeout=3600)
     response = {
         'status': 'success',
         'data': {
@@ -40,13 +40,12 @@ def get_status(task_id):
             'data': {
                 'task_id': task.get_id(),
                 'task_status': task.get_status(),
-                'task_result': task.result,
             }
-        }        
+        }
     else:
         response = {'status': 'error'}
 
-    return jsonify(response_object)
+    return jsonify(response)
 
 
 @app.route('/download/<task_id>', methods=['GET'])
