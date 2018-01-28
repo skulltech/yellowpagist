@@ -1,1 +1,2 @@
-web gunicorn -t 300 yellowpagist:app
+worker: python worker.py
+web gunicorn yellowpagist:app
