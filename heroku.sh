@@ -6,7 +6,7 @@ read -p "YP API Key: " apikey
 echo
 
 echo "[*] Creating Heroku app..."
-heroku create
+url=$(heroku create | awk '/herokuapp.com/ && /git.heroku.com/ {print $1}')
 echo
 
 echo "[*] Adding YP APIKey to the Environment Variables..."
@@ -14,7 +14,7 @@ heroku config:add YPAPIKey=$apikey
 echo
 
 echo "[*] Pushing to Heroku Git repo..."
-url=$(git push heroku master | awk '/deployed to Heroku/ {print $(NF-3)}')
+url=`git push heroku master | awk '/deployed to Heroku/ {print $(NF-3)}'`
 echo
 
 echo "[*] Adding Redistogo addon..."
