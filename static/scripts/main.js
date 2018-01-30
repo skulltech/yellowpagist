@@ -8,6 +8,9 @@ $('form').submit(function(event) {
   var formdata = $(this).serializeObject();
   console.log(formdata);
   event.preventDefault();
+  
+  $("#loading").toggleClass("invisible");
+  $("#submitBtn").toggleClass("invisible");
 
   $.ajax(
     {
@@ -31,14 +34,12 @@ function getStatus(taskID) {
     method: 'GET'
   })
   .done((res) => {
-    $("#loadingGIF").show();
-    $("#submitBtn").hide();
     const taskStatus = res.data.task_status;
 
     if (taskStatus === 'finished' || taskStatus === 'failed') {
       window.location.assign(`/download/${taskID}`);
-      $("#loadingGIF").hide();
-      $("#submitBtn").show();
+      $("#loading").toggleClass("invisible");
+      $("#submitBtn").toggleClass("invisible");
       return false;
     }
     setTimeout(function() {
