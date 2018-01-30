@@ -94,7 +94,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 	 ```
 
 
-4. __Add `RedisToGo` addon__.
+4. __Add RedisToGo addon__.
 
 	```console
 	HAL9000:yellowpagist (master) $ heroku addons:create redistogo:nano
@@ -103,7 +103,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 	Use heroku addons:docs redistogo to view documentation
 	```
 
-5. __Scale the `worker` dyno__.
+5. __Scale the worker dyno__.
 
 	```console
 	HAL9000:yellowpagist (master) $ heroku ps:scale worker=1
