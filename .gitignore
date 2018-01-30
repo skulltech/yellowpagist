@@ -105,3 +105,6 @@ creds.yaml
 
 # Scraped results
 listings.csv
+
+# Log file of heroku.sh
+heroku.log

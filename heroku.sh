@@ -3,9 +3,9 @@
 
 
 echo "Starting execution of heroku.sh at `date`" > heroku.log
-echo > heroku.log
+echo >> heroku.log
 
-read -p "YP API Key: " apikey
+read -p "[*] YP API Key: " apikey
 echo
 
 echo "[*] Creating Heroku app..."
@@ -28,6 +28,6 @@ echo "[*] Starting the worker process..."
 heroku ps:scale worker=1 &>> heroku.log
 echo &>> heroku.log
 
-echo "[*] Completed."
 HEROKUURL=$(cat heroku.log |& awk '/deployed to Heroku/ {print $(NF-3)}')
-echo "[*] You can access the web-app at: $HEROKUURL"
+echo 
+echo "[*] Completed. You can access the web-app at: $HEROKUURL"
