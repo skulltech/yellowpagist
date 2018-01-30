@@ -15,8 +15,6 @@ echo
 
 echo "[*] Pushing to Heroku Git repo..."
 HEROKUURL=$(git push heroku master |& awk '/deployed to Heroku/ {print $(NF-3)}')
-echo "The URL is: "
-echo $HEROKUURL
 echo
 
 echo "[*] Adding Redistogo addon..."
