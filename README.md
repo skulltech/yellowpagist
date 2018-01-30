@@ -17,7 +17,17 @@ sumit@HAL9000:/home/sumit/Documents/yellowpagist  git:(master) $ python3 yp.py
 ```
 
 
-### Hosting on Heroku
+## Hosting on Heroku
+
+You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself.
+
+### Hosting on Heroku: Using bash script
+
+```console
+
+```
+
+### Manually.
 
 1. __Create Heroku app__.
     
@@ -54,7 +64,7 @@ sumit@HAL9000:/home/sumit/Documents/yellowpagist  git:(master) $ python3 yp.py
 	
 	[Output Truncated]
 	...
-	
+
 	remote:        Successfully installed Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.14.1 certifi-2018.1.18 chardet-3.0.4 click-6.7 flask-0.12.2 gunicorn-19.7.1 idna-2.6 itsdangerous-0.24 pyyaml-3.12 redis-2.10.6 requests-2.18.4 rq-0.10.0 urllib3-1.22
 	remote: 
 	remote: -----> Discovering process types
