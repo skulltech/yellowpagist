@@ -14,7 +14,7 @@ heroku config:add YPAPIKey=$apikey
 echo
 
 echo '[*] Pushing to Heroku Git repo...'
-url = $(git push heroku master | awk '/deployed to Heroku/ {print $(NF-3)}')
+url=$(git push heroku master | awk '/deployed to Heroku/ {print $(NF-3)}')
 echo
 
 echo '[*] Adding Redistogo addon...'
