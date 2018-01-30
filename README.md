@@ -24,10 +24,20 @@ You can host the app on Heroku by simply running a bash script, or manually doin
 ### Hosting on Heroku: Using bash script
 
 ```console
+sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh 
+[*] YP API Key: API_KEY
 
+[*] Creating Heroku app...
+[*] Adding YP APIKey to the Environment Variables...
+[*] Pushing to Heroku Git repo...
+[*] Adding Redistogo addon...
+[*] Starting the worker process...
+
+[*] Completed. You can access the web-app at: https://ancient-gorge-40961.herokuapp.com/
+[*] Logs stored in heroku.log
 ```
 
-### Manually.
+### Hosting on Heroku: Manually
 
 1. __Create Heroku app__.
     
