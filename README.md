@@ -19,6 +19,8 @@ sumit@HAL9000:/home/sumit/Documents/yellowpagist  git:(master) $ python3 yp.py
 
 ## Hosting on Heroku
 
+__Important__: You need a [__verified__](https://devcenter.heroku.com/articles/account-verification) Heroku account to host this app, as it uses _Redistogo_ worker addon.  
+
 You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself.
 
 ### Hosting on Heroku: Using bash script
