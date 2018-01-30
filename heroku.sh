@@ -31,3 +31,4 @@ echo &>> heroku.log
 HEROKUURL=$(cat heroku.log |& awk '/deployed to Heroku/ {print $(NF-3)}')
 echo 
 echo "[*] Completed. You can access the web-app at: $HEROKUURL"
+echo "[*] Logs stored in heroku.logs"
