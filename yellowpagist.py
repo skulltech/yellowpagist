@@ -52,7 +52,7 @@ def get_status(task_id):
 def download(task_id):
     task = q.fetch_job(task_id)
     save(task.result)
-    return send_file('listings.csv')
+    return send_file('listings.csv', as_attachment=True)
 
 
 
