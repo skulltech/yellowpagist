@@ -21,7 +21,10 @@ $ python3 yp.py
 
 __Important__: You need a [__verified__](https://devcenter.heroku.com/articles/account-verification) Heroku account to host this app, as it uses _Redistogo_ worker addon.  
 
-You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself.
+You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself. Either way, before you follow the method, make sure you're logged in to Heroku CLI. If you aren't, login using
+```console
+$ heroku login
+````
 
 ### Hosting on Heroku: Using bash script
 
