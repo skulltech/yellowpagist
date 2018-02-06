@@ -23,11 +23,12 @@ body {
   background-color: #f5f5f5;
 }
 
-.form-signin {
+.form-searchdata {
   width: 100%;
   max-width: 420px;
   padding: 15px;
   margin: 0 auto;
+  max-height:100%;
 }
 
 .form-label-group {
