@@ -6,7 +6,7 @@ You can access the web-app [here](https://yellowpagist.herokuapp.com/) - https:/
 ### Running the app from terminal
 
 ```console
-sumit@HAL9000:/home/sumit/Documents/yellowpagist  git:(master) $ python3 yp.py 
+$ python3 yp.py 
 [*] Search term: Nail salon
 [*] Location: New york
 [*] Radius (in miles): 10	
@@ -21,12 +21,15 @@ sumit@HAL9000:/home/sumit/Documents/yellowpagist  git:(master) $ python3 yp.py
 
 __Important__: You need a [__verified__](https://devcenter.heroku.com/articles/account-verification) Heroku account to host this app, as it uses _Redistogo_ worker addon.  
 
-You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself.
+You can host the app on Heroku by simply running a bash script, or manually doing all the steps yourself. Either way, before you follow the method, make sure you're logged in to Heroku CLI. If you aren't, login using
+```console
+$ heroku login
+````
 
 ### Hosting on Heroku: Using bash script
 
 ```console
-sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh 
+$ ./heroku.sh 
 [*] YP API Key: API_KEY
 
 [*] Creating Heroku app...
@@ -44,7 +47,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 1. __Create Heroku app__.
     
 	```console
-	HAL9000:yellowpagist (master) $ heroku create
+	$ heroku create
 	Creating app... done, ⬢ fathomless-beach-85273
 	https://fathomless-beach-85273.herokuapp.com/ | https://git.heroku.com/fathomless-beach-85273.git
 	```
@@ -52,7 +55,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 2. __Configure Environment Variables__. We need to add the YP.com API Key to the environment variables of the Heroku app so that it can access the API.
 
 	```console
-	HAL9000:yellowpagist (master) $ heroku config:add YPAPIKey=API_KEY 
+	$ heroku config:add YPAPIKey=API_KEY 
 	Setting YPAPIKey and restarting ⬢ fathomless-beach-85273... done, v3
 	YPAPIKey: 9ph6j2hpcz
 	```
@@ -60,7 +63,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 3. __Push to Heroku Git repo__.
 
 	```console
-	HAL9000:yellowpagist (master) $ git push heroku master
+	$ git push heroku master
 	Counting objects: 120, done.
 	Delta compression using up to 4 threads.
 	Compressing objects: 100% (64/64), done.
@@ -97,7 +100,7 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 4. __Add RedisToGo addon__.
 
 	```console
-	HAL9000:yellowpagist (master) $ heroku addons:create redistogo:nano
+	$ heroku addons:create redistogo:nano
 	Creating redistogo:nano on ⬢ fathomless-beach-85273... free
 	Created redistogo-silhouetted-31890 as REDISTOGO_URL
 	Use heroku addons:docs redistogo to view documentation
@@ -106,6 +109,6 @@ sumit@HAL9000:~/Documents/test/yellowpagist$ ./heroku.sh
 5. __Scale the worker dyno__.
 
 	```console
-	HAL9000:yellowpagist (master) $ heroku ps:scale worker=1
+	$ heroku ps:scale worker=1
 	Scaling dynos... done, now running worker at 1:Free
 	```
