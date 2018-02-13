@@ -43,25 +43,20 @@ class GMaps:
             'radius': radius,
             'query': query
         }
-        places = requests.get(ENDPOINT, params=params).json()
+        
         results = []
-
-        for i in range(3):
-            time.sleep(10)
-            print('[*] Iteration number: {}'.format(i))
+        while True:
+            places = requests.get(ENDPOINT, params=params).json()
             results = results + places['results']
-            
             try:
                 next_page_token = places['next_page_token']
-                print(next_page_token)
             except KeyError:
-                print(json.dumps(places, indent=2))
                 break
-            
             params['pagetoken'] = next_page_token
-            places = requests.get(ENDPOINT, params=params).json()
+            time.sleep(2)
 
         return results
+
 
 def save(listings):
     with open('listings.csv', 'w', newline='') as csvfile:
@@ -88,7 +83,7 @@ def main():
     #     maxRating = None
     
     # listings = gmaps.places(query, location, radius)
-    listings = gmaps.places('nail salon', 'new york', 2000)
+    listings = gmaps.places('nail salon', 'new york', 100)
     print(len(listings))
     ids = [p['id'] for p in listings]
     print(len(list(set(ids))))
