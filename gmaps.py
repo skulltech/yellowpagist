@@ -1,5 +1,3 @@
-import googlemaps
-from datetime import datetime
 import requests
 import yaml
 import json
@@ -58,7 +56,7 @@ class GMaps:
 
 
 
-    def places(self, query, location, radius):
+    def places(self, query, location, radius, min_rating=None, max_rating=None):
         ENDPOINT = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
         params = {
             'key': self.APIKey,
@@ -83,7 +81,7 @@ class GMaps:
             try:
                 rating = result['rating']
             except KeyError:
-                rating = None
+                rating = 0.0
 
             entry = {
                 'id': result['place_id'],
@@ -95,13 +93,17 @@ class GMaps:
             entry.update(self.get_details(entry['id']))
             parsed.append(entry)
 
+        if min_rating:
+            parsed =  [x for x in parsed if x['rating'] >= min_rating]
+        if max_rating:
+            parsed =  [x for x in parsed if x['rating'] <= max_rating]
         return parsed
 
 
 
 def save(listings):
-    with open('listings.csv', 'w', newline='') as csvfile:
-        fieldnames = ['listingId', 'businessName', 'ratingCount', 'averageRating', 'city', 'state', 'zip', 'phone', 'moreInfoURL']
+    with open('places.csv', 'w', newline='') as csvfile:
+        fieldnames = ['id', 'name', 'geocode', 'rating', 'address', 'phone_number', 'website']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
 
         writer.writeheader()
@@ -111,26 +113,22 @@ def save(listings):
 
 def main():
     gmaps = GMaps()
-    # query = input('[*] Search term: ')
-    # location = input('[*] Location: ')
-    # radius = int(input('[*] Radius (in meters): '))
-    # try:
-    #     minRating = float(input('[*] Minimum rating (optional): '))
-    # except TypeError:
-    #     minRating = None
-    # try:
-    #     maxRating = float(input('[*] Maximum rating (optional): '))
-    # except TypeError:
-    #     maxRating = None
+    query = input('[*] Search query: ')
+    location = input('[*] Location: ')
+    radius = int(input('[*] Radius (in meters): '))
+    try:
+        min_rating = float(input('[*] Minimum rating (optional): '))
+    except TypeError:
+        min_rating = None
+    try:
+        max_rating = float(input('[*] Maximum rating (optional): '))
+    except TypeError:
+        max_rating = None
     
-    # listings = gmaps.places(query, location, radius)
-    listings = gmaps.places('nail salon', 'new york', 100)
-    print(len(listings))
-    print(json.dumps(listings, indent=2))
-    # print(json.dumps(listings, indent=2))
-    # save(listings)
-    # print()
-    # print('[*] {} listings scraped. Saved in listings.csv'.format(len(listings)))
+    places = gmaps.places(query, location, radius, min_rating, max_rating)
+    save(places)
+    print()
+    print('[*] {} places scraped. Saved in places.csv'.format(len(places)))
 
 
 
