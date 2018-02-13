@@ -1,11 +1,11 @@
 import googlemaps
 from datetime import datetime
-
+import requests
 import yaml
 import json
 import csv
 import os
-
+import time
 
 
 class GMaps:
@@ -28,30 +28,40 @@ class GMaps:
 
     def geocode(self, address):
         ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json'
+        params = {'address': address, 'key': self.APIKey}
+        response = requests.get(ENDPOINT, params=params)
+
+        code = response.json()['results'][0]['geometry']['location']
+        return str(code['lat']) + ',' + str(code['lng'])
 
 
-def places(query, location, radius, minRating=None, maxRating=None):
-    APIKey = getAPIKey()
-    gmaps = googlemaps.Client(key=APIKey)
-    geocode = gmaps.geocode(location)[0]['geometry']['location']
-    places = gmaps.places(query=query, location=geocode, radius=radius)
+    def places(self, query, location, radius):
+        ENDPOINT = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
+        params = {
+            'key': self.APIKey,
+            'location': self.geocode(location),
+            'radius': radius,
+            'query': query
+        }
+        places = requests.get(ENDPOINT, params=params).json()
+        results = []
 
-    results = []
-    while True:
-        print(len(places['results']))
-        results = results + places['results']
-        next_page_token = places['next_page_token']
-        print(next_page_token)
-        print()
-        places = gmaps.places(query=query, location=geocode, radius=radius, page_token=next_page_token)
+        for i in range(3):
+            time.sleep(10)
+            print('[*] Iteration number: {}'.format(i))
+            results = results + places['results']
+            
+            try:
+                next_page_token = places['next_page_token']
+                print(next_page_token)
+            except KeyError:
+                print(json.dumps(places, indent=2))
+                break
+            
+            params['pagetoken'] = next_page_token
+            places = requests.get(ENDPOINT, params=params).json()
 
-    # if minRating:
-    #     listings =  [x for x in listings if x['averageRating'] >= minRating]
-    # if maxRating:
-    #     listings =  [x for x in listings if x['averageRating'] <= maxRating]
-    
-    return places
-
+        return results
 
 def save(listings):
     with open('listings.csv', 'w', newline='') as csvfile:
@@ -64,9 +74,10 @@ def save(listings):
 
 
 def main():
-    query = input('[*] Search term: ')
-    location = input('[*] Location: ')
-    radius = int(input('[*] Radius (in meters): '))
+    gmaps = GMaps()
+    # query = input('[*] Search term: ')
+    # location = input('[*] Location: ')
+    # radius = int(input('[*] Radius (in meters): '))
     # try:
     #     minRating = float(input('[*] Minimum rating (optional): '))
     # except TypeError:
@@ -76,8 +87,13 @@ def main():
     # except TypeError:
     #     maxRating = None
     
-    listings = places(query, location, radius)
-    print(json.dumps(listings, indent=2))
+    # listings = gmaps.places(query, location, radius)
+    listings = gmaps.places('nail salon', 'new york', 2000)
+    print(len(listings))
+    ids = [p['id'] for p in listings]
+    print(len(list(set(ids))))
+    print(ids)
+    # print(json.dumps(listings, indent=2))
     # save(listings)
     # print()
     # print('[*] {} listings scraped. Saved in listings.csv'.format(len(listings)))
