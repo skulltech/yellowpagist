@@ -3,9 +3,15 @@
     
     <form class="form-searchdata" id="form">
       <div class="text-center mb-4">
-        <img class="mb-4" src="/static/images/yellow-pages.png" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">YELLOWPAGIST</h1>
-        <p>Scrape business listings from <a href="https://www.yellowpages.com/">YP.com</a></p>
+        {% if backend=="yellowpages" %}
+          <img class="mb-4" src="/static/images/yellow-pages.png" alt="" width="72" height="72">
+          <h1 class="h3 mb-3 font-weight-normal">YELLOWPAGIST</h1>
+          <p>Scrape business listings from <a href="https://www.yellowpages.com/">YP.com</a></p>
+        {% elif backend=="google" %}
+          <img class="mb-4" src="/static/images/google-places.svg" alt="" width="72" height="72">
+          <h1 class="h3 mb-3 font-weight-normal">YELLOWPAGIST</h1>
+          <p>Scrape business listings from <a href="https://developers.google.com/places/">Google Places API</a></p>
+        {% endif %}
       </div>
       
       <div class="form-label-group">

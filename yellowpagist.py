@@ -12,7 +12,7 @@ q = Queue(connection=conn)
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('form.html')
+    return render_template('form.html', backend='yellopages')
 
 
 @app.route('/enqueue', methods=['POST'])
