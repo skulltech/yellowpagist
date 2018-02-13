@@ -8,6 +8,7 @@ import os
 import time
 
 
+
 class GMaps:
     def __init__(self, APIKey=None):
         if not APIKey:
@@ -35,6 +36,28 @@ class GMaps:
         return str(code['lat']) + ',' + str(code['lng'])
 
 
+    def get_details(self, place_id):
+        ENDPOINT = 'https://maps.googleapis.com/maps/api/place/details/json'
+        params = {'key': self.APIKey, 'placeid': place_id}
+        response = requests.get(ENDPOINT, params=params).json()
+
+        try:
+            phone_number = response['result']['international_phone_number']
+        except KeyError:
+            phone_number = None
+        try:
+            website = response['result']['website']
+        except KeyError:
+            website = None
+
+        result = {
+            'phone_number': phone_number,
+            'website': website
+        }
+        return result
+
+
+
     def places(self, query, location, radius):
         ENDPOINT = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
         params = {
@@ -55,7 +78,25 @@ class GMaps:
             params['pagetoken'] = next_page_token
             time.sleep(2)
 
-        return results
+        parsed = []
+        for result in results:
+            try:
+                rating = result['rating']
+            except KeyError:
+                rating = None
+
+            entry = {
+                'id': result['place_id'],
+                'name': result['name'],
+                'geocode': str(result['geometry']['location']['lat']) + ',' + str(result['geometry']['location']['lng']),
+                'rating': rating,
+                'address': result['formatted_address']
+            }
+            entry.update(self.get_details(entry['id']))
+            parsed.append(entry)
+
+        return parsed
+
 
 
 def save(listings):
@@ -85,9 +126,7 @@ def main():
     # listings = gmaps.places(query, location, radius)
     listings = gmaps.places('nail salon', 'new york', 100)
     print(len(listings))
-    ids = [p['id'] for p in listings]
-    print(len(list(set(ids))))
-    print(ids)
+    print(json.dumps(listings, indent=2))
     # print(json.dumps(listings, indent=2))
     # save(listings)
     # print()
