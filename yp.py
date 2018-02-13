@@ -53,8 +53,8 @@ class YP:
         return listings
 
 
-def save(listings):
-    with open('listings.csv', 'w', newline='') as csvfile:
+def save(listings, filename):
+    with open('listings/' + filename, 'w', newline='') as csvfile:
         fieldnames = ['listingId', 'businessName', 'ratingCount', 'averageRating', 'city', 'state', 'zip', 'phone', 'moreInfoURL']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
 
@@ -78,7 +78,7 @@ def main():
         maxRating = None
     
     listings = yp.search(term, location, radius, minRating, maxRating)
-    save(listings)
+    save(listings, 'listings.csv')
     print()
     print('[*] {} listings scraped. Saved in listings.csv'.format(len(listings)))
 

@@ -101,8 +101,8 @@ class GMaps:
 
 
 
-def save(listings):
-    with open('listings.csv', 'w', newline='') as csvfile:
+def save(listings, filename):
+    with open('listings/' + filename, 'w', newline='') as csvfile:
         fieldnames = ['id', 'name', 'geocode', 'rating', 'address', 'phone_number', 'website']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction='ignore')
 
@@ -126,7 +126,7 @@ def main():
         max_rating = None
     
     places = gmaps.places(query, location, radius, min_rating, max_rating)
-    save(places)
+    save(places, 'listings.csv')
     print()
     print('[*] {} places scraped. Saved in listings.csv'.format(len(places)))
 

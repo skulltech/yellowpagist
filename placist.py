@@ -52,9 +52,10 @@ def get_status(task_id):
 @app.route('/download/<task_id>', methods=['GET'])
 def download(task_id):
     task = q.fetch_job(task_id)
-    save(task.result)
+    filename = 'listings.' + task_id + '.csv'
+    save(task.result, filename)
 
-    return send_file('listings.csv', as_attachment=True)
+    return send_file('listings/' + filename, as_attachment=True)
 
 
 
