@@ -16,7 +16,7 @@ class GMaps:
 
     @staticmethod
     def getAPIKey():
-        if 'YPAPIKey' in os.environ:
+        if 'GoogleAPIKey' in os.environ:
             APIKey = os.environ['GoogleAPIKey']
         else:    
             with open('creds.yaml') as file:
