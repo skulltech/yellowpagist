@@ -4,6 +4,8 @@ import json
 import csv
 import os
 import time
+import random
+import math
 
 
 
@@ -98,6 +100,18 @@ class GMaps:
         if max_rating:
             parsed =  [x for x in parsed if x['rating'] <= max_rating]
         return parsed
+
+
+    @staticmethod
+    def location(lat, lon, radius):
+        rd = radius / 11300
+        u, v = random.uniform(0.0, 1.0), random.uniform(0.0, 1.0)
+        w = rd * math.sqrt(u)
+        t = 2 * math.pi *  v
+        x = w * math.cos(t)
+        y = w * math.sin(t)
+
+        return (lat + y, lon + x)        
 
 
 
