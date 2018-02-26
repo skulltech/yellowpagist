@@ -44,7 +44,7 @@ def location(geocode, radius):
     x = w * math.cos(t)
     y = w * math.sin(t)
 
-    return (float(geocode['lat']) + y, float(geocode['lng']) + x)
+    return {'lat': float(geocode['lat']) + y, 'lng': float(geocode['lng']) + x}
 
 
 
@@ -97,12 +97,11 @@ class GMaps:
 
 
 
-    def places(self, query, location, radius, min_rating=None, max_rating=None):
+    def places(self, query, geocode, radius, min_rating=None, max_rating=None):
         ENDPOINT = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
-        code = self.geocode(location)
         params = {
             'key': self.APIKey,
-            'location': '{},{}'.format(code[lat], code[lng]),
+            'location': '{},{}'.format(geocode[lat], geocode[lng]),
             'radius': radius,
             'query': query
         }
@@ -117,6 +116,17 @@ class GMaps:
                 break
             params['pagetoken'] = next_page_token
             time.sleep(2)
+
+
+
+
+    def search(self, query, location, radius, points=1, min_rating=None, max_rating=None):
+        code = self.geocode(location)
+        results = []
+        for i in range(points):
+            results = results + self.places(query, code, radius, min_rating, max_rating)
+            results = list(set(results))
+            code = location(code, radius)
 
         parsed = []
         for result in results:
@@ -140,7 +150,6 @@ class GMaps:
         if max_rating:
             parsed =  [x for x in parsed if x['rating'] <= max_rating]
         return parsed
-
 
 
 
