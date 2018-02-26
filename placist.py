@@ -19,8 +19,9 @@ def index():
 def enqueue():
     scraper = GMaps()
     args = (request.form['term'], request.form['location'], 
-                            int(request.form['radius']), float(request.form['minRating']), float(request.form['maxRating']))
-    task = q.enqueue_call(func=scraper.places, args=args, result_ttl=5000, timeout=3600)
+                            int(request.form['radius']), int(request.form['points']), 
+                            float(request.form['minRating']), float(request.form['maxRating']))
+    task = q.enqueue_call(func=scraper.search, args=args, result_ttl=5000, timeout=3600)
     
     response = {
         'status': 'success',
