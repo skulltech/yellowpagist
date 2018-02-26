@@ -29,6 +29,13 @@
         <label for="radius">Radius</label>
       </div>
 
+      {% if backend=="google" %}
+      <div class="form-label-group">
+        <input type="number" id="points" name="points" class="form-control" placeholder="Points" required>
+        <label for="radius">Points</label>
+      </div>
+      {% endif %}
+
       <div class="form-label-group">
         <input type="number" id="minRating" name="minRating" class="form-control" placeholder="Minimum rating" required>
         <label for="minRating">Minimum rating</label>

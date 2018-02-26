@@ -4,6 +4,47 @@ import json
 import csv
 import os
 import time
+import random
+import math
+
+
+'''
+def distance(geocode1, geocode2):
+    R = 6373.0
+
+    lat1 = math.radians(geocode1[0])
+    lon1 = math.radians(geocode1[1])
+    lat2 = math.radians(geocode2[0])
+    lon2 = math.radians(geocode2[1])
+
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    distance = R * c
+    return distance
+
+
+def testaccuracy(loc, radius):
+    gm = GMaps()
+    geocode = gm.geocode(loc)
+
+    for i in range(10):
+        print(distance((geocode['lat'], geocode['lng']), location(geocode, radius)))
+'''
+
+
+def random_location(geocode, radius):
+    rd = radius / 11300
+    u, v = random.uniform(0.0, 1.0), random.uniform(0.0, 1.0)
+    w = rd * math.sqrt(u)
+    t = 2 * math.pi *  v
+    x = w * math.cos(t)
+    y = w * math.sin(t)
+
+    return {'lat': float(geocode['lat']) + y, 'lng': float(geocode['lng']) + x}
 
 
 
@@ -31,7 +72,7 @@ class GMaps:
         response = requests.get(ENDPOINT, params=params)
 
         code = response.json()['results'][0]['geometry']['location']
-        return str(code['lat']) + ',' + str(code['lng'])
+        return code
 
 
     def get_details(self, place_id):
@@ -56,11 +97,11 @@ class GMaps:
 
 
 
-    def places(self, query, location, radius, min_rating=None, max_rating=None):
+    def places(self, query, geocode, radius, min_rating=None, max_rating=None):
         ENDPOINT = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
         params = {
             'key': self.APIKey,
-            'location': self.geocode(location),
+            'location': '{},{}'.format(geocode['lat'], geocode['lng']),
             'radius': radius,
             'query': query
         }
@@ -75,7 +116,7 @@ class GMaps:
                 break
             params['pagetoken'] = next_page_token
             time.sleep(2)
-
+        
         parsed = []
         for result in results:
             try:
@@ -90,7 +131,6 @@ class GMaps:
                 'rating': rating,
                 'address': result['formatted_address']
             }
-            entry.update(self.get_details(entry['id']))
             parsed.append(entry)
 
         if min_rating:
@@ -99,6 +139,19 @@ class GMaps:
             parsed =  [x for x in parsed if x['rating'] <= max_rating]
         return parsed
 
+
+    def search(self, query, location, radius, points=1, min_rating=None, max_rating=None):
+        code = self.geocode(location)
+        results = []
+        for i in range(points):
+            results = results + self.places(query, code, radius, min_rating, max_rating)
+            results = list({i['id']:i for i in reversed(results)}.values())
+            code = random_location(code, radius)
+
+        for entry in results:
+            entry.update(self.get_details(entry['id']))
+
+        return results
 
 
 def save(listings, filename):
@@ -116,6 +169,7 @@ def main():
     query = input('[*] Search query: ')
     location = input('[*] Location: ')
     radius = int(input('[*] Radius (in meters): '))
+    points = int(input('[*] Number of points to take: '))
     try:
         min_rating = float(input('[*] Minimum rating (optional): '))
     except TypeError:
@@ -125,7 +179,7 @@ def main():
     except TypeError:
         max_rating = None
     
-    places = gmaps.places(query, location, radius, min_rating, max_rating)
+    places = gmaps.search(query, location, radius, points, min_rating, max_rating)
     save(places, 'listings.csv')
     print()
     print('[*] {} places scraped. Saved in listings.csv'.format(len(places)))
