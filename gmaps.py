@@ -6,6 +6,8 @@ import os
 import time
 import random
 import math
+# from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
 
 
 '''
@@ -142,12 +144,19 @@ class GMaps:
 
     def search(self, query, location, radius, points=1, min_rating=None, max_rating=None):
         code = self.geocode(location)
-        results = []
+        codes = []
+
         for i in range(points):
-            results = results + self.places(query, code, radius, min_rating, max_rating)
-            results = list({i['id']:i for i in reversed(results)}.values())
+            codes.append(code)
             code = random_location(code, radius)
 
+        fun = lambda x: self.places(query, x, radius, min_rating, max_rating)
+        with Pool(10) as p:
+            results = p.map(fun, codes)
+
+        flat = [item for sublist in results for item in sublist]
+        results = list({i['id']:i for i in reversed(flat)}.values())
+            
         for entry in results:
             entry.update(self.get_details(entry['id']))
 
