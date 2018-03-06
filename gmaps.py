@@ -6,7 +6,6 @@ import os
 import time
 import random
 import math
-# from multiprocessing import Pool
 from pathos.multiprocessing import ProcessingPool as Pool
 
 

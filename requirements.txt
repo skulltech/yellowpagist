@@ -3,4 +3,4 @@ pyyaml
 flask
 gunicorn
 rq
-googlemaps
+pathos
