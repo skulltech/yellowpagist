@@ -1,0 +1,27 @@
+version: '3'
+services:
+  yellowpagist:
+    build: .
+    image: skulltech/yellowpagist
+    env_file: creds.env
+    command: gunicorn yellowpagist:app -b 0.0.0.0:4000
+    ports:
+    - '4000:4000'
+    depends_on:
+    - redis
+  placist:
+    build: .
+    image: skulltech/yellowpagist
+    env_file: creds.env
+    command: gunicorn yellowpagist:app -b 0.0.0.0:8000
+    ports:
+    - '8000:8000'
+    depends_on:
+    - redis
+  worker:
+    image: skulltech/yellowpagist
+    command: python worker.py
+    depends_on:
+    - redis
+  redis:
+    image: redis
