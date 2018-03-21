@@ -19,8 +19,7 @@ services:
     depends_on:
     - redis
   worker:
-    image: skulltech/yellowpagist
-    command: python worker.py
+    image: skulltech/supervisord-worker
     depends_on:
     - redis
   redis:
