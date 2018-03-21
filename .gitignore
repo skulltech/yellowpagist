@@ -105,7 +105,7 @@ creds.yaml
 creds.env
 
 # Scraped results
-listings/
+*.csv
 
 # Log file of heroku.sh
 heroku.log
